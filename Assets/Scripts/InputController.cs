@@ -16,5 +16,10 @@ public class InputController : MonoBehaviour
     {
         Vector2 moveVector = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         PC.UpdateMoveVector(moveVector);
+
+        if(Input.GetButtonDown("Pickup"))
+        {
+            PC.Pickup();
+        }
     }
 }
