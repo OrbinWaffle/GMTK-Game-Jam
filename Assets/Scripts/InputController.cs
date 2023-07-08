@@ -33,5 +33,9 @@ public class InputController : MonoBehaviour
         if (Input.GetButtonUp("Sprint")){
             PC.EndSprint();
         }
+
+        if (Input.GetButtonDown("Throw")){
+
+        }
     }
 }
