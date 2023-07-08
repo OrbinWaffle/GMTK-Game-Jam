@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
     GameObject heldObj;
     float verticalVelocity = 0f;
     float nextGroundCheckTime = 0f;
+    float startTime;
     // Start is called before the first frame update
     void Start()
     {
@@ -80,12 +81,12 @@ public class PlayerController : MonoBehaviour
         Collider[] colliders = Physics.OverlapSphere(holdSpot.position, 1.5f);
         foreach(Collider collider in colliders)
         {
-            if(collider.CompareTag("Fruit"))
-            {
+            if(collider.CompareTag("Fruit")){
                 heldObj = collider.gameObject;
                 heldObj.transform.parent = holdSpot;
                 heldObj.transform.position = holdSpot.transform.position;
                 heldObj.GetComponent<Rigidbody>().isKinematic = true;
+                heldObj.GetComponent<ItemParent>().CancelLifespan();
                 break;
             }
         }
@@ -100,6 +101,29 @@ public class PlayerController : MonoBehaviour
     }
 
     public void StartThrow(){
+        startTime = Time.time;
+    }
+
+    public void EndThrow(){
+        float endTime = Time.time - startTime;
+        float kickForce = 16.0f;
+
         anim.SetTrigger("kick");
+
+        Debug.Log(endTime);
+
+        if (endTime > 2.0f){
+            kickForce = 25.0f;
+        }
+
+        if (heldObj){
+            heldObj.GetComponent<Rigidbody>().isKinematic = false;
+            heldObj.transform.parent = null;
+            heldObj.GetComponent<Rigidbody>().AddForce(holdSpot.up * kickForce, ForceMode.Impulse);
+            heldObj = null;
+        }
+
+
+
     }
 }
