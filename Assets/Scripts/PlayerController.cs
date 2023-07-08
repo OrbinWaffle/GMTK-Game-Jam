@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     float groundCheckDelay = 0.25f;
     Vector2 moveVector;
     CharacterController CC;
+    Animator anim;
     GameObject heldObj;
     float verticalVelocity = 0f;
     float nextGroundCheckTime = 0f;
@@ -20,11 +21,17 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         CC = GetComponent<CharacterController>();
+        anim = GetComponentInChildren<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        UpdateAnimations();
+    }
+    void UpdateAnimations()
+    {
+        anim.SetFloat("moveSpeed", moveVector.magnitude);
     }
     void FixedUpdate()
     {
@@ -64,7 +71,6 @@ public class PlayerController : MonoBehaviour
     {
         if(heldObj != null)
         {
-            Debug.Log("hi");
             heldObj.GetComponent<Rigidbody>().isKinematic = false;
             heldObj.transform.parent = null;
             heldObj = null;
