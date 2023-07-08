@@ -1987,6 +1987,9 @@ MonoBehaviour:
   rotationSpeed: 1000
   sprintMultiplier: 1
   holdSpot: {fileID: 2000444412}
+  minKickForce: 16
+  maxKickForce: 25
+  maxHoldTime: 2
 --- !u!114 &1211756488
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -2,27 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InputController : MonoBehaviour
-{
+public class InputController : MonoBehaviour{
     PlayerController PC;
+
     // Start is called before the first frame update
-    void Start()
-    {
+    void Start(){
         PC = GetComponent<PlayerController>();
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update(){
         Vector2 moveVector = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         PC.UpdateMoveVector(moveVector);
 
-        if(Input.GetButtonDown("Pickup"))
-        {
+        if (Input.GetButtonDown("Pickup")){
             PC.Pickup();
         }
-        if(Input.GetButtonDown("Jump"))
-        {
+
+        if (Input.GetButtonDown("Jump")){
             PC.Jump();
         }
 
@@ -36,6 +33,10 @@ public class InputController : MonoBehaviour
 
         if (Input.GetButtonDown("Throw")){
             PC.StartThrow();
+        }
+
+        if (Input.GetButtonUp("Throw")){
+            PC.EndThrow();
         }
     }
 }

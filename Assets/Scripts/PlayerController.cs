@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
-{
+public class PlayerController : MonoBehaviour{
     [SerializeField] float moveSpeed = 0.25f;
     [SerializeField] float jumpSpeed = 1f;
     [SerializeField] float gravity = 9.81f;
@@ -17,75 +16,75 @@ public class PlayerController : MonoBehaviour
     GameObject heldObj;
     float verticalVelocity = 0f;
     float nextGroundCheckTime = 0f;
+    float startTime;
+    [SerializeField] float minKickForce;
+    [SerializeField] float maxKickForce;
+    [SerializeField] float maxHoldTime;
     // Start is called before the first frame update
-    void Start()
-    {
+
+    void Start(){
         CC = GetComponent<CharacterController>();
         anim = GetComponentInChildren<Animator>();
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update(){
         UpdateAnimations();
     }
-    void UpdateAnimations()
-    {
+
+    void UpdateAnimations(){
         anim.SetFloat("moveSpeed", moveVector.magnitude);
         anim.SetBool("isHolding", heldObj != null);
     }
-    void FixedUpdate()
-    {
-        if(CC.isGrounded && Time.time > nextGroundCheckTime)
-        {
+    void FixedUpdate(){
+
+        if(CC.isGrounded && Time.time > nextGroundCheckTime){
             verticalVelocity = 0f;
         }
-        else
-        {
+        else{
             verticalVelocity -= gravity * Time.fixedDeltaTime;
         }
-        CC.Move
-        (
+
+        CC.Move(
             new Vector3(moveVector.x, 0, moveVector.y) * moveSpeed * sprintMultiplier * Time.fixedDeltaTime
             + Vector3.up * verticalVelocity * Time.fixedDeltaTime
         );
     }
-    public void UpdateMoveVector(Vector2 newVec)
-    {
+    public void UpdateMoveVector(Vector2 newVec){
         moveVector = newVec;
-        if(newVec != Vector2.zero)
-        {
+
+        if(newVec != Vector2.zero){
             RotatePlayer(new Vector3(moveVector.x, 0, moveVector.y));
         }
     }
-    public void RotatePlayer(Vector3 vectorToRotateTowards)
-    {
+    public void RotatePlayer(Vector3 vectorToRotateTowards){
         Quaternion targetRotation = Quaternion.LookRotation(vectorToRotateTowards, Vector3.up);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
     }
-    public void Jump()
-    {
+
+    public void Jump(){
         nextGroundCheckTime = Time.time + groundCheckDelay;
         verticalVelocity = jumpSpeed;
     }
-    public void Pickup()
-    {
-        if(heldObj != null)
-        {
+
+    public void Pickup(){
+        if(heldObj != null){
             heldObj.GetComponent<Rigidbody>().isKinematic = false;
             heldObj.transform.parent = null;
             heldObj = null;
             return;
         }
+
         Collider[] colliders = Physics.OverlapSphere(holdSpot.position, 1.5f);
-        foreach(Collider collider in colliders)
-        {
-            if(collider.CompareTag("Fruit"))
-            {
+
+        foreach(Collider collider in colliders){
+            if(collider.CompareTag("Fruit")){
                 heldObj = collider.gameObject;
                 heldObj.transform.parent = holdSpot;
                 heldObj.transform.position = holdSpot.transform.position;
                 heldObj.GetComponent<Rigidbody>().isKinematic = true;
+                heldObj.GetComponent<ItemParent>().CancelLifespan();
+
                 break;
             }
         }
@@ -100,6 +99,31 @@ public class PlayerController : MonoBehaviour
     }
 
     public void StartThrow(){
+        startTime = Time.time;
+    }
+
+    public void EndThrow(){
+        float endTime;
+        float kickForce;
+
+        endTime = Time.time - startTime;
+
         anim.SetTrigger("kick");
+
+        if (endTime > maxHoldTime){
+            endTime = maxHoldTime;
+        }
+
+        kickForce = Mathf.Lerp(minKickForce, maxKickForce, (endTime / maxHoldTime));
+
+        Debug.Log(kickForce);
+
+        if (heldObj){
+            heldObj.GetComponent<Rigidbody>().isKinematic = false;
+            heldObj.transform.parent = null;
+            heldObj.GetComponent<Rigidbody>().AddForce(holdSpot.up * kickForce, ForceMode.Impulse);
+            heldObj.GetComponent<ItemParent>().collisionEnabled = true;
+            heldObj = null;
+        }
     }
 }
