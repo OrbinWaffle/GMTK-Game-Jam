@@ -59,6 +59,7 @@ public class NinjaController : MonoBehaviour
         if(Time.time >= nextSlashTime && Vector3.Distance(transform.position, closest.transform.position) < slashRange)
         {
             GameObject fruitToKill = closest;
+            Instantiate(slashPrefab, fruitToKill.transform.position, Quaternion.Euler(0,0,Random.Range(0,256)));
             RemoveFruit(closest);
             Destroy(fruitToKill);
             nextSlashTime = Time.time + slashCooldown;

@@ -1242,37 +1242,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 710196890}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &718832790
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 718832791}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &718832791
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 718832790}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 17
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &841676733
 GameObject:
   m_ObjectHideFlags: 0
@@ -1556,14 +1525,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 11.6, z: -100}
+  m_LocalRotation: {x: 0.03327602, y: -0, z: -0, w: 0.9994462}
+  m_LocalPosition: {x: 0, y: 19.3, z: -100}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 3.814, y: 0, z: 0}
 --- !u!1001 &999709799
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1877,7 +1846,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1195984115}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 4, y: 12.42, z: 9}
+  m_LocalPosition: {x: 0, y: 12.42, z: 8.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1900,9 +1869,9 @@ MonoBehaviour:
   maxMoveSpeed: 10
   moveSpeed: 20
   rotationSpeed: 1000
-  slashRange: 5
+  slashRange: 4
   slashCooldown: 1
-  slashPrefab: {fileID: 3557180646620011452, guid: c8f239c82e219a541b70a91e65d4d544, type: 3}
+  slashPrefab: {fileID: 8441343578778640760, guid: 25f7a7105579f914f8358647d5d66fdd, type: 3}
 --- !u!143 &1195984118
 CharacterController:
   m_ObjectHideFlags: 0
@@ -2128,7 +2097,7 @@ MonoBehaviour:
   gravity: 60
   rotationSpeed: 1000
   sprintMultiplier: 1
-  pickupRange: 2
+  pickupRange: 3
   holdSpot: {fileID: 2000444412}
   minKickForce: 16
   maxKickForce: 25
@@ -2516,7 +2485,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ejectionForce: 10
-  fruitDelay: 5
+  fruitDelay: 3
   queueSize: 5
   queueDistance: 3
   FruitPool:
