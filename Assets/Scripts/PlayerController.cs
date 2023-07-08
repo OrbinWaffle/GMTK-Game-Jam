@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour{
     [SerializeField] float gravity = 9.81f;
     [SerializeField] float rotationSpeed = 1f;
     [SerializeField] float sprintMultiplier = 1f;
+    [SerializeField] float pickupRange = 1f;
     [SerializeField] Transform holdSpot;
     float groundCheckDelay = 0.25f;
     Vector2 moveVector;
@@ -75,7 +76,7 @@ public class PlayerController : MonoBehaviour{
             return;
         }
 
-        Collider[] colliders = Physics.OverlapSphere(holdSpot.position, 1.5f);
+        Collider[] colliders = Physics.OverlapSphere(holdSpot.position, pickupRange);
 
         foreach(Collider collider in colliders){
             if(collider.CompareTag("Fruit")){
@@ -119,6 +120,7 @@ public class PlayerController : MonoBehaviour{
         Debug.Log(kickForce);
 
         if (heldObj){
+            Physics.IgnoreCollision(CC, heldObj.GetComponent<Collider>());
             heldObj.GetComponent<Rigidbody>().isKinematic = false;
             heldObj.transform.parent = null;
             heldObj.GetComponent<Rigidbody>().AddForce(holdSpot.up * kickForce, ForceMode.Impulse);
