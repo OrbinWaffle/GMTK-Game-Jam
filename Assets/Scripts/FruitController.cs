@@ -13,6 +13,7 @@ public class FruitController : MonoBehaviour
     public Queue<GameObject> VisualFruitQueue;
     [SerializeField] Transform queueLocation;
     [SerializeField] Transform[] pipes;
+    public 
 
     float nextFruitTime = 5;
     
@@ -57,6 +58,8 @@ public class FruitController : MonoBehaviour
         Transform pipeToUse = pipes[Random.Range(0, pipes.Length)];
         GameObject fruitInstance = Instantiate(selectedFruit, pipeToUse.position, Quaternion.identity);
         fruitInstance.GetComponent<Rigidbody>().AddForce(pipeToUse.up * ejectionForce, ForceMode.Impulse);
+        fruitInstance.GetComponent<ItemParent>().itemInstance = fruitInstance;
+        fruitInstance.GetComponent<ItemParent>().StartLifespan();
         Destroy(VisualFruitQueue.Peek());
         VisualFruitQueue.Dequeue();
     }
