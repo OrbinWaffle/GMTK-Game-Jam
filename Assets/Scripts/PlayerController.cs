@@ -32,6 +32,7 @@ public class PlayerController : MonoBehaviour
     void UpdateAnimations()
     {
         anim.SetFloat("moveSpeed", moveVector.magnitude);
+        anim.SetBool("isHolding", heldObj != null);
     }
     void FixedUpdate()
     {
@@ -76,7 +77,7 @@ public class PlayerController : MonoBehaviour
             heldObj = null;
             return;
         }
-        Collider[] colliders = Physics.OverlapSphere(holdSpot.position, 1);
+        Collider[] colliders = Physics.OverlapSphere(holdSpot.position, 1.5f);
         foreach(Collider collider in colliders)
         {
             if(collider.CompareTag("Fruit"))
@@ -99,6 +100,6 @@ public class PlayerController : MonoBehaviour
     }
 
     public void StartThrow(){
-
+        anim.SetTrigger("kick");
     }
 }
