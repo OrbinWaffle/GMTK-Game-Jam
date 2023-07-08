@@ -7,6 +7,8 @@ public class NinjaSlash : MonoBehaviour
 
     public GameObject slashPrefab;
     private float timer = 0f;
+    private List<GameObject> fruitList = new List<GameObject>();
+
     // Start is called before the first frame update
     void Start()
     {
@@ -27,6 +29,10 @@ public class NinjaSlash : MonoBehaviour
             timer = 0f;
         }
 
+        for (int i = 0; i < fruitList.Count; i++){
+            Destroy(fruitList[i]);
+        }
+
         /*
         if(Input.GetKeyDown(KeyCode.F)){
             //Vector3 randomSpawnPosition = new Vector3(Random.Range(-1, 1), 2, Random.Range(-1, 1));
@@ -36,5 +42,9 @@ public class NinjaSlash : MonoBehaviour
             Instantiate(slashPrefab, randomSpawnPosition, Quaternion.identity);
         }
         */
+    }
+
+    public void addFruit(GameObject fruit){
+        fruitList.Add(fruit);
     }
 }
