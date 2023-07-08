@@ -92,7 +92,7 @@ public class PlayerController : MonoBehaviour{
     }
 
     public void StartSprint(){
-        sprintMultiplier = 4f;
+        sprintMultiplier = 2f;
     }
 
     public void EndSprint(){

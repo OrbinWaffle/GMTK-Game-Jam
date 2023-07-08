@@ -18,52 +18,57 @@ public class FruitController : MonoBehaviour
     float nextFruitTime = 5;
     
     // Start is called before the first frame update
-    void Start()
-    {
+    void Start(){
         FruitQueue = new Queue<GameObject>();
+
         VisualFruitQueue = new Queue<GameObject>();
-        for(int i = 0; i < queueSize; ++i)
-        {
+
+        for(int i = 0; i < queueSize; ++i){
             AddToQueue(queueLocation.position + Vector3.up * i * 2);
         }
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        if(Time.time >= nextFruitTime)
-        {
+    void Update(){
+        if(Time.time >= nextFruitTime){
             AddToQueue();
+
             SpawnFruit();
+
             nextFruitTime = Time.time + fruitDelay;
         }
     }
-    public void AddToQueue()
-    {
+    public void AddToQueue(){
         GameObject selectedFruit = FruitPool[Random.Range(0, FruitPool.Length)];
         GameObject pipeFruit = Instantiate(selectedFruit, queueLocation.position, Quaternion.identity);
+
         FruitQueue.Enqueue(selectedFruit);
+
         VisualFruitQueue.Enqueue(pipeFruit);
     }
-    public void AddToQueue(Vector3 location)
-    {
+    public void AddToQueue(Vector3 location){
         GameObject selectedFruit = FruitPool[Random.Range(0, FruitPool.Length)];
         GameObject pipeFruit = Instantiate(selectedFruit, location, Quaternion.identity);
+
         FruitQueue.Enqueue(selectedFruit);
+
         VisualFruitQueue.Enqueue(pipeFruit);
     }
-    public void SpawnFruit()
-    {
+    public void SpawnFruit(){
         GameObject selectedFruit = FruitQueue.Dequeue();
         Transform pipeToUse = pipes[Random.Range(0, pipes.Length)];
         GameObject fruitInstance = Instantiate(selectedFruit, pipeToUse.position, Quaternion.identity);
+
         fruitInstance.GetComponent<Rigidbody>().AddForce(pipeToUse.up * ejectionForce, ForceMode.Impulse);
+
         fruitInstance.GetComponent<ItemParent>().itemInstance = fruitInstance;
+
         fruitInstance.GetComponent<ItemParent>().StartLifespan();
+
         Destroy(VisualFruitQueue.Peek());
+
         VisualFruitQueue.Dequeue();
     }
-    public void DisplayQueue()
-    {
+    public void DisplayQueue(){
     }
 }
