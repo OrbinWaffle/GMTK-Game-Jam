@@ -3,7 +3,37 @@ guid: 8a2243c18991b244bab0380c056d0e5a
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Darkness
+    second: {fileID: 2100000, guid: 8dfe05782b34307449d1f146bd4633f3, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DojoFloor
+    second: {fileID: 2100000, guid: d7267d72e1cebb74986f54c677452490, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DojoPillar
+    second: {fileID: 2100000, guid: e08067ef7b27c2b4185d62171841f713, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DojoWall
+    second: {fileID: 2100000, guid: cb5ba47d8c75f4c47bd5fa13cb4de9aa, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: UnderFloor
+    second: {fileID: 2100000, guid: 61da657f0c6ca5f4d940b5d0d817b98b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: UnderWall
+    second: {fileID: 2100000, guid: 1a3c1e314c96a26449267ec2d4ec0f2d, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
