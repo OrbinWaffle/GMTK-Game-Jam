@@ -97,4 +97,8 @@ public class PlayerController : MonoBehaviour
     public void EndSprint(){
         sprintMultiplier = 1f;
     }
+
+    public void StartThrow(){
+
+    }
 }
