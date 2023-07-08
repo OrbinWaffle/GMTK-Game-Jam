@@ -517,11 +517,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5fa188be0b5efd447809e90dc093d285, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7071067
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5fa188be0b5efd447809e90dc093d285, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.7071068
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5fa188be0b5efd447809e90dc093d285, type: 3}
       propertyPath: m_LocalRotation.y
@@ -529,7 +529,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5fa188be0b5efd447809e90dc093d285, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5fa188be0b5efd447809e90dc093d285, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1945,7 +1945,8 @@ MonoBehaviour:
   moveSpeed: 10
   jumpSpeed: 20
   gravity: 60
-  rotationSpeed: 250
+  rotationSpeed: 1000
+  sprintMultiplier: 1
   holdSpot: {fileID: 2000444412}
 --- !u!114 &1211756488
 MonoBehaviour:

@@ -52,7 +52,7 @@ public class PlayerController : MonoBehaviour
     }
     public void RotatePlayer(Vector3 vectorToRotateTowards)
     {
-        Quaternion targetRotation = Quaternion.LookRotation(Vector3.up, vectorToRotateTowards);
+        Quaternion targetRotation = Quaternion.LookRotation(vectorToRotateTowards, Vector3.up);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
     }
     public void Jump()
