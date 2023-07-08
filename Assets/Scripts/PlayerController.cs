@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] float moveSpeed = 1f;
+    [SerializeField] float moveSpeed = 0.25f;
     [SerializeField] float jumpSpeed = 1f;
     [SerializeField] float gravity = 9.81f;
+    [SerializeField] float sprintMultiplier = 1f;
     [SerializeField] Transform holdSpot;
     float groundCheckDelay = 0.25f;
     Vector2 moveVector;
@@ -36,7 +37,7 @@ public class PlayerController : MonoBehaviour
         }
         CC.Move
         (
-            new Vector3(moveVector.x, 0, moveVector.y) * moveSpeed * Time.fixedDeltaTime
+            new Vector3(moveVector.x, 0, moveVector.y) * moveSpeed * sprintMultiplier * Time.fixedDeltaTime
             + Vector3.up * verticalVelocity * Time.fixedDeltaTime
         );
     }
@@ -76,5 +77,13 @@ public class PlayerController : MonoBehaviour
                 break;
             }
         }
+    }
+
+    public void StartSprint(){
+        sprintMultiplier = 4f;
+    }
+
+    public void EndSprint(){
+        sprintMultiplier = 1f;
     }
 }

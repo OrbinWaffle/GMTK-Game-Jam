@@ -25,5 +25,13 @@ public class InputController : MonoBehaviour
         {
             PC.Jump();
         }
+
+        if (Input.GetButtonDown("Sprint")){
+            PC.StartSprint();
+        }
+
+        if (Input.GetButtonUp("Sprint")){
+            PC.EndSprint();
+        }
     }
 }
