@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float moveSpeed = 1f;
     [SerializeField] float jumpSpeed = 1f;
     [SerializeField] float gravity = 9.81f;
+    [SerializeField] float rotationSpeed = 1f;
     [SerializeField] Transform holdSpot;
     float groundCheckDelay = 0.25f;
     Vector2 moveVector;
@@ -43,11 +44,15 @@ public class PlayerController : MonoBehaviour
     public void UpdateMoveVector(Vector2 newVec)
     {
         moveVector = newVec;
-        RotatePlayer(moveVector);
+        if(newVec != Vector2.zero)
+        {
+            RotatePlayer(new Vector3(moveVector.x, 0, moveVector.y));
+        }
     }
-    public void RotatePlayer(Vector2 vectorToRotateTowards)
+    public void RotatePlayer(Vector3 vectorToRotateTowards)
     {
-        
+        Quaternion targetRotation = Quaternion.LookRotation(Vector3.up, vectorToRotateTowards);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
     }
     public void Jump()
     {

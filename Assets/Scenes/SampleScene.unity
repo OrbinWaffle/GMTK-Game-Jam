@@ -1945,6 +1945,7 @@ MonoBehaviour:
   moveSpeed: 10
   jumpSpeed: 20
   gravity: 60
+  rotationSpeed: 250
   holdSpot: {fileID: 2000444412}
 --- !u!114 &1211756488
 MonoBehaviour:
@@ -2233,8 +2234,6 @@ MonoBehaviour:
   FruitPool:
   - {fileID: 3417135078028214248, guid: 7c36fcb46e1ae1648a5e67df3a66046d, type: 3}
   - {fileID: 3417135078028214248, guid: a04d7a07659e30e418a527af212b4c73, type: 3}
-  FruitQueue: []
-  VisualFruitQueue: []
   queueLocation: {fileID: 1541589534}
   pipes:
   - {fileID: 1804884676}
