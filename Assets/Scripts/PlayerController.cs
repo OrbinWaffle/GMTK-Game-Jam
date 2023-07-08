@@ -120,6 +120,7 @@ public class PlayerController : MonoBehaviour{
         Debug.Log(kickForce);
 
         if (heldObj){
+            Physics.IgnoreCollision(CC, heldObj.GetComponent<Collider>());
             heldObj.GetComponent<Rigidbody>().isKinematic = false;
             heldObj.transform.parent = null;
             heldObj.GetComponent<Rigidbody>().AddForce(holdSpot.up * kickForce, ForceMode.Impulse);

@@ -6,11 +6,13 @@ public class NinjaController : MonoBehaviour
 {
     [SerializeField] float maxMoveSpeed = 5f;
     [SerializeField] float moveSpeed = 1f;
+    [SerializeField] float rotationSpeed = 1f;
     [SerializeField] private float slashRange = 3f;
     [SerializeField] private float slashCooldown = 1f;
     [SerializeField] GameObject slashPrefab;
     List<GameObject> fruitList;
     CharacterController CC;
+    Animator anim;
     private float nextSlashTime = 0f;
     private float timer = 0f;
     // Start is called before the first frame update
@@ -18,6 +20,7 @@ public class NinjaController : MonoBehaviour
     {
         fruitList = new List<GameObject>();
         CC = GetComponent<CharacterController>();
+        anim = GetComponentInChildren<Animator>();
     }
 
     // Update is called once per frame
@@ -49,6 +52,8 @@ public class NinjaController : MonoBehaviour
         GameObject closest = FindClosest(fruitList);
         if(!closest)
         {
+            RotateNinja(Vector3.forward);
+            anim.SetFloat("moveSpeed", 0);
             return;
         }
         if(Time.time >= nextSlashTime && Vector3.Distance(transform.position, closest.transform.position) < slashRange)
@@ -59,8 +64,10 @@ public class NinjaController : MonoBehaviour
             nextSlashTime = Time.time + slashCooldown;
         }
         Vector3 targetVector = (closest.transform.position - transform.position).normalized;
-
-        CC.Move(Vector3.right * Mathf.Clamp(targetVector.x * moveSpeed, -maxMoveSpeed, maxMoveSpeed) * Time.fixedDeltaTime);
+        float movement =  Mathf.Clamp(targetVector.x * moveSpeed, -maxMoveSpeed, maxMoveSpeed) * Time.fixedDeltaTime;
+        CC.Move(Vector3.right * movement);
+        RotateNinja(-(Vector3.right * movement).normalized);
+        anim.SetFloat("moveSpeed", Mathf.Abs(movement));
     }
 
     GameObject FindClosest(List<GameObject> list)
@@ -81,6 +88,10 @@ public class NinjaController : MonoBehaviour
             }
         }
         return currClosest;
+    }
+    public void RotateNinja(Vector3 vectorToRotateTowards){
+        Quaternion targetRotation = Quaternion.LookRotation(vectorToRotateTowards, Vector3.up);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
     }
     public void AddFruit(GameObject fruit)
     {
