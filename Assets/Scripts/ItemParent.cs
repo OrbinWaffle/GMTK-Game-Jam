@@ -5,7 +5,7 @@ using UnityEngine;
 public class ItemParent : MonoBehaviour{
     public GameObject itemInstance;
     [SerializeField] int lifespan;
-    int points;
+    [SerializeField] int points;
 
 
 
@@ -14,18 +14,14 @@ public class ItemParent : MonoBehaviour{
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        
+    void Update(){    
     }
 
     public void StartLifespan(){
         StartCoroutine(Lifespan());
     }
 
-    public IEnumerator Lifespan() {
-        Debug.Log("Lifetime Started");
-
+    public IEnumerator Lifespan(){
         yield return new WaitForSeconds(lifespan);
 
         Destroy(itemInstance);
