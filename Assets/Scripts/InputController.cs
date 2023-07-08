@@ -37,5 +37,9 @@ public class InputController : MonoBehaviour
         if (Input.GetButtonDown("Throw")){
             PC.StartThrow();
         }
+
+        if (Input.GetButtonUp("Throw")){
+            PC.EndThrow();
+        }
     }
 }
