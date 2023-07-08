@@ -14,12 +14,16 @@ public class InputController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector2 moveVector = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        Vector2 moveVector = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")).normalized;
         PC.UpdateMoveVector(moveVector);
 
         if(Input.GetButtonDown("Pickup"))
         {
             PC.Pickup();
+        }
+        if(Input.GetButtonDown("Jump"))
+        {
+            PC.Jump();
         }
     }
 }
