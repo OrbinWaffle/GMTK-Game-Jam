@@ -9,20 +9,21 @@ public class FruitController : MonoBehaviour
     [SerializeField] int queueSize = 5;
     [SerializeField] int queueDistance = 3;
     [SerializeField] GameObject[] FruitPool;
-    public List<GameObject> FruitQueue;
-    public List<GameObject> VisualFruitQueue;
+    public Queue<GameObject> FruitQueue;
+    public Queue<GameObject> VisualFruitQueue;
     [SerializeField] Transform queueLocation;
     [SerializeField] Transform[] pipes;
 
-    float nextFruitTime = 0;
+    float nextFruitTime = 5;
     
     // Start is called before the first frame update
     void Start()
     {
-        FruitQueue = new List<GameObject>();
+        FruitQueue = new Queue<GameObject>();
+        VisualFruitQueue = new Queue<GameObject>();
         for(int i = 0; i < queueSize; ++i)
         {
-            AddToQueue(queueLocation.position + Vector3.down * i * 10);
+            AddToQueue(queueLocation.position + Vector3.up * i * 2);
         }
     }
 
@@ -40,23 +41,24 @@ public class FruitController : MonoBehaviour
     {
         GameObject selectedFruit = FruitPool[Random.Range(0, FruitPool.Length)];
         GameObject pipeFruit = Instantiate(selectedFruit, queueLocation.position, Quaternion.identity);
-        FruitQueue.Add(selectedFruit);
-        VisualFruitQueue.Add(pipeFruit);
+        FruitQueue.Enqueue(selectedFruit);
+        VisualFruitQueue.Enqueue(pipeFruit);
     }
     public void AddToQueue(Vector3 location)
     {
         GameObject selectedFruit = FruitPool[Random.Range(0, FruitPool.Length)];
         GameObject pipeFruit = Instantiate(selectedFruit, location, Quaternion.identity);
-        FruitQueue.Add(selectedFruit);
-        VisualFruitQueue.Add(pipeFruit);
+        FruitQueue.Enqueue(selectedFruit);
+        VisualFruitQueue.Enqueue(pipeFruit);
     }
     public void SpawnFruit()
     {
-        GameObject selectedFruit = FruitQueue[0];
+        GameObject selectedFruit = FruitQueue.Dequeue();
         Transform pipeToUse = pipes[Random.Range(0, pipes.Length)];
         GameObject fruitInstance = Instantiate(selectedFruit, pipeToUse.position, Quaternion.identity);
         fruitInstance.GetComponent<Rigidbody>().AddForce(pipeToUse.up * ejectionForce, ForceMode.Impulse);
-        FruitQueue.RemoveAt(0);
+        Destroy(VisualFruitQueue.Peek());
+        VisualFruitQueue.Dequeue();
     }
     public void DisplayQueue()
     {
