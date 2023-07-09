@@ -9,19 +9,26 @@ public class ScoreManager : MonoBehaviour{
     public static ScoreManager instance;
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI highscoreText;
+    public TextMeshProUGUI timerText;
+    public GameObject gameOverObj;
+    public TextMeshProUGUI finalMessage;
 
     private void Awake(){
         instance = this;
     }
 
     int ninjaScore = 0;
-    int highScore = 0;
+    int lowScore = 0;
 
     // Start is called before the first frame update
     void Start(){
-        highScore = PlayerPrefs.GetInt("highScore", 0);
+        lowScore = PlayerPrefs.GetInt("lowScore", 0);
         scoreText.text = ninjaScore.ToString() + " Points";
-        highscoreText.text = "High Score: " + highScore;
+        highscoreText.text = "Lowest Score: " + lowScore;
+    }
+    public void UpdateTimer(int timeLeft)
+    {
+        timerText.text = "Time Left: " + timeLeft;
     }
 
     public void AddPoints(int points){
@@ -30,10 +37,15 @@ public class ScoreManager : MonoBehaviour{
         ninjaScore += points;
         scoreText.text = ninjaScore.ToString() + " Points";
 
-        if (highScore < ninjaScore){
-            highScore = ninjaScore;
-
-            PlayerPrefs.SetInt("highScore", highScore);
+        if (lowScore > ninjaScore){
+            lowScore = ninjaScore;
+            highscoreText.text = "Lowest Score: " + lowScore;
+            PlayerPrefs.SetInt("lowScore", lowScore);
         }
+    }
+    public void DisplayGameOver()
+    {
+        gameOverObj.SetActive(true);
+        finalMessage.text = "The Ninja got " + ninjaScore + " points.";
     }
 }

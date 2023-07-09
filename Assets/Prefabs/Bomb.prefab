@@ -81,7 +81,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collisionEnabled: 0
   deathObject: {fileID: 225281058948781177, guid: c016ff4e19181c14287d2192d6c7487e, type: 3}
-  lifespan: 30
+  lifespan: 15
   points: -2
   scoreManager: {fileID: 0}
 --- !u!1 &8175930141338614971

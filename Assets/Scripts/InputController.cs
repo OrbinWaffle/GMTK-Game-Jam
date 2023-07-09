@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class InputController : MonoBehaviour{
     PlayerController PC;
+    bool canMove = true;
 
     // Start is called before the first frame update
     void Start(){
@@ -12,6 +13,11 @@ public class InputController : MonoBehaviour{
 
     // Update is called once per frame
     void Update(){
+        if(canMove == false)
+        {
+            PC.UpdateMoveVector(Vector2.zero);
+            return;
+        }
         Vector2 moveVector = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         PC.UpdateMoveVector(moveVector);
 
@@ -42,5 +48,9 @@ public class InputController : MonoBehaviour{
         if (Input.GetButtonDown("FruitBasket")){
             PC.InteractWithFruitBasket();
         }
+    }
+    public void OnGameOver()
+    {
+        canMove = false;
     }
 }
