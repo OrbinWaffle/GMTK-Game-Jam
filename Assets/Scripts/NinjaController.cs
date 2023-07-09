@@ -104,10 +104,17 @@ public class NinjaController : MonoBehaviour
         {
             return null;
         }
-        GameObject currClosest = list[0];
-        float closestDist = Vector3.Distance(currClosest.transform.position, transform.position);
-        foreach (GameObject fruit in fruitList)
+        GameObject currClosest = null;
+        float closestDist = Mathf.Infinity;
+        for(int i = 0; i < fruitList.Count; ++i)
         {
+            GameObject fruit = fruitList[i];
+            if(fruit == null)
+            {
+                fruitList.RemoveAt(i);
+                --i;
+                continue;
+            }
             float dist = Vector3.Distance(fruit.transform.position, transform.position);
             if(dist < closestDist)
             {
@@ -132,7 +139,6 @@ public class NinjaController : MonoBehaviour
         RemoveFruit(objToAttack);
         objToAttack.GetComponent<ItemParent>().KillMe();
         anim.SetTrigger("attack");
-        Debug.Log("HAHA");
         nextSlashTime = Time.time + slashCooldown;
     }
     public void RotateNinja(Vector3 vectorToRotateTowards){
