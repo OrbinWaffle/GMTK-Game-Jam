@@ -36,6 +36,7 @@ public class PlayerController : MonoBehaviour{
     void UpdateAnimations(){
         anim.SetFloat("moveSpeed", moveVector.magnitude);
         anim.SetBool("isHolding", heldObj != null);
+        // anim.SetBool("isGrounded", CC.isGrounded);
     }
     void FixedUpdate(){
 

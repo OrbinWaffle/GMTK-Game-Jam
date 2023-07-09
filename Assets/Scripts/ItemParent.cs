@@ -5,7 +5,7 @@ using UnityEngine;
 public class ItemParent : MonoBehaviour{
     public bool collisionEnabled = false;
     IEnumerator currentCoroutine;
-    GameObject deathObject;
+    [SerializeField] GameObject deathObject;
     [SerializeField] int lifespan;
     [SerializeField] int points;
 
@@ -31,13 +31,24 @@ public class ItemParent : MonoBehaviour{
 
     public IEnumerator Lifespan(){
         yield return new WaitForSeconds(lifespan);
-
-        Destroy(gameObject);
+        KillMe();
     }
 
     void OnCollisionEnter(Collision collison){
         if (collisionEnabled){
-            Destroy(gameObject);
+            KillMe();
         }
+    }
+    public void OnExploded()
+    {
+        KillMe();
+    }
+    public void KillMe()
+    {
+        if(deathObject != null)
+        {
+            Instantiate(deathObject, transform.position, Quaternion.identity);
+        }
+        Destroy(gameObject);
     }
 }
