@@ -30,7 +30,9 @@ public class ScoreManager : MonoBehaviour{
         scoreText.text = ninjaScore.ToString() + " Points";
 
         if (highScore < ninjaScore){
-            PlayerPrefs.SetInt("highScore", ninjaScore);
+            highScore = ninjaScore;
+
+            PlayerPrefs.SetInt("highScore", highScore);
         }
     }
 }
