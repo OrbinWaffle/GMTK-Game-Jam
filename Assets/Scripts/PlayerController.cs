@@ -93,10 +93,12 @@ public class PlayerController : MonoBehaviour{
 
     public void StartSprint(){
         sprintMultiplier = 2f;
+        anim.speed = 2f;
     }
 
     public void EndSprint(){
         sprintMultiplier = 1f;
+        anim.speed = 1f;
     }
 
     public void StartThrow(){
@@ -104,6 +106,10 @@ public class PlayerController : MonoBehaviour{
     }
 
     public void EndThrow(){
+        if(heldObj == null)
+        {
+            return;
+        }
         float endTime;
         float kickForce;
 
@@ -121,6 +127,7 @@ public class PlayerController : MonoBehaviour{
 
         if (heldObj){
             Physics.IgnoreCollision(CC, heldObj.GetComponent<Collider>());
+            heldObj.transform.position = transform.position + Vector3.up * 2;
             heldObj.GetComponent<Rigidbody>().isKinematic = false;
             heldObj.transform.parent = null;
             heldObj.GetComponent<Rigidbody>().AddForce(holdSpot.up * kickForce, ForceMode.Impulse);

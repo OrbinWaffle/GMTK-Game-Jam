@@ -7,6 +7,8 @@ public class NinjaController : MonoBehaviour
     [SerializeField] float maxMoveSpeed = 5f;
     [SerializeField] float moveSpeed = 1f;
     [SerializeField] float rotationSpeed = 1f;
+    [SerializeField] float minReactionTime = .5f;
+    [SerializeField] float maxReactionTime = 2f;
     [SerializeField] private float slashRange = 3f;
     [SerializeField] private float slashCooldown = 1f;
     [SerializeField] GameObject slashPrefab;
@@ -49,6 +51,11 @@ public class NinjaController : MonoBehaviour
     }
     void FixedUpdate()
     {        
+        if(Time.time < nextSlashTime)
+        {
+            anim.SetFloat("moveSpeed", 0);
+            return;
+        }
         GameObject closest = FindClosest(fruitList);
         if(!closest)
         {
@@ -58,11 +65,7 @@ public class NinjaController : MonoBehaviour
         }
         if(Time.time >= nextSlashTime && Vector3.Distance(transform.position, closest.transform.position) < slashRange)
         {
-            GameObject fruitToKill = closest;
-            Instantiate(slashPrefab, fruitToKill.transform.position, Quaternion.Euler(0,0,Random.Range(0,256)));
-            RemoveFruit(closest);
-            Destroy(fruitToKill);
-            nextSlashTime = Time.time + slashCooldown;
+            Attack(closest);
         }
         Vector3 targetVector = (closest.transform.position - transform.position).normalized;
         float movement =  Mathf.Clamp(targetVector.x * moveSpeed, -maxMoveSpeed, maxMoveSpeed) * Time.fixedDeltaTime;
@@ -90,12 +93,26 @@ public class NinjaController : MonoBehaviour
         }
         return currClosest;
     }
+    void Attack(GameObject objToAttack)
+    {
+        GameObject fruitToKill = objToAttack;
+        Instantiate(slashPrefab, fruitToKill.transform.position, Quaternion.Euler(0,0,Random.Range(0,256)));
+        RemoveFruit(objToAttack);
+        Destroy(fruitToKill);
+        anim.SetTrigger("attack");
+        nextSlashTime = Time.time + slashCooldown;
+    }
     public void RotateNinja(Vector3 vectorToRotateTowards){
         Quaternion targetRotation = Quaternion.LookRotation(vectorToRotateTowards, Vector3.up);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
     }
     public void AddFruit(GameObject fruit)
     {
+        StartCoroutine(AddFruitDelay(fruit));
+    }
+    IEnumerator AddFruitDelay(GameObject fruit)
+    {
+        yield return new WaitForSeconds(Random.Range(minReactionTime, maxReactionTime));
         fruitList.Add(fruit);
     }
     public void RemoveFruit(GameObject fruit)
