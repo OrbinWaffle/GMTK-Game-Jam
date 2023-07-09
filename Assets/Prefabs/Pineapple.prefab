@@ -80,7 +80,7 @@ MonoBehaviour:
   collisionEnabled: 0
   deathObject: {fileID: 225281058948781177, guid: 082486adcac34154ba14b1b3de76959b, type: 3}
   lifespan: 30
-  points: 0
+  points: 1
 --- !u!1001 &2888649629266236151
 PrefabInstance:
   m_ObjectHideFlags: 0

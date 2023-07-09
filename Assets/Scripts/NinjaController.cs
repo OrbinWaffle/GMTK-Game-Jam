@@ -142,6 +142,7 @@ public class NinjaController : MonoBehaviour
         GameObject fruitToKill = objToAttack;
         Instantiate(slashPrefab, fruitToKill.transform.position, Quaternion.Euler(0,0,Random.Range(0,256)));
         RemoveFruit(objToAttack);
+        objToAttack.GetComponent<ItemParent>().scoreManager.AddPoints(objToAttack.GetComponent<ItemParent>().GetPoints());
         objToAttack.GetComponent<ItemParent>().KillMe();
         anim.SetTrigger("attack");
         nextSlashTime = Time.time + slashCooldown;
