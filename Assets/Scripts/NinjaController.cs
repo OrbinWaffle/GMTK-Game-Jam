@@ -11,7 +11,10 @@ public class NinjaController : MonoBehaviour
     [SerializeField] float maxReactionTime = 2f;
     [SerializeField] private float slashRange = 3f;
     [SerializeField] private float slashCooldown = 1f;
+    [SerializeField] private float confidienceGainRate = 1f;
+    [SerializeField] private float confidienceBoost = 10f;
     [SerializeField] float gravity = 9.81f;
+    float confidience = 0;
     float verticalVelocity = 0f;
     [SerializeField] GameObject slashPrefab;
     List<GameObject> fruitList;
@@ -62,14 +65,13 @@ public class NinjaController : MonoBehaviour
     void FixedUpdate()
     {        
         GameObject closest = FindClosest(fruitList);
-        if(closest)
-        {
-            Vector3 targetVector = (closest.transform.position - transform.position).normalized;
-            movement = Mathf.Clamp(targetVector.x * moveSpeed, -maxMoveSpeed, maxMoveSpeed);
-        }
-
         if(CC.isGrounded && Time.time > nextGroundCheckTime)
         {
+            if(closest)
+            {
+                Vector3 targetVector = (closest.transform.position - transform.position).normalized;
+                movement = Mathf.Clamp(targetVector.x * moveSpeed, -maxMoveSpeed, maxMoveSpeed);
+            }
             verticalVelocity = 0f;
             if(Time.time < nextSlashTime)
             {
@@ -96,6 +98,7 @@ public class NinjaController : MonoBehaviour
         {
             RotateNinja(-(Vector3.right * movement).normalized);
         }
+        confidience += Time.fixedDeltaTime * 1;
     }
 
     GameObject FindClosest(List<GameObject> list)
@@ -127,6 +130,8 @@ public class NinjaController : MonoBehaviour
     public void OnExploded()
     {
         anim.SetTrigger("knockedBack");
+
+        confidience = 0f;
         
         verticalVelocity = 10;
         movement = Random.Range(-.5f, .5f) * moveSpeed;
@@ -140,6 +145,7 @@ public class NinjaController : MonoBehaviour
         objToAttack.GetComponent<ItemParent>().KillMe();
         anim.SetTrigger("attack");
         nextSlashTime = Time.time + slashCooldown;
+
     }
     public void RotateNinja(Vector3 vectorToRotateTowards){
         Quaternion targetRotation = Quaternion.LookRotation(vectorToRotateTowards, Vector3.up);
