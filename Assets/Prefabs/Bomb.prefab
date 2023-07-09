@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7291826735135359890}
   - component: {fileID: 3747556995842690458}
   - component: {fileID: 3444009345178748570}
-  - component: {fileID: 4168846876234666378}
+  - component: {fileID: -7077689878308321185}
   m_Layer: 6
   m_Name: Bomb
   m_TagString: Fruit
@@ -67,7 +67,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &4168846876234666378
+--- !u!114 &-7077689878308321185
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -76,13 +76,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 3417135078028214248}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8093ce5b3dd5b414ebd141a57b65634d, type: 3}
+  m_Script: {fileID: 11500000, guid: d3c4dd8901790314b8b61cbb9a622617, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   collisionEnabled: 0
   deathObject: {fileID: 225281058948781177, guid: c016ff4e19181c14287d2192d6c7487e, type: 3}
   lifespan: 30
   points: -2
+  scoreManager: {fileID: 0}
 --- !u!1 &8175930141338614971
 GameObject:
   m_ObjectHideFlags: 0
