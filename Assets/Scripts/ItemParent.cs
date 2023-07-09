@@ -55,6 +55,7 @@ public class ItemParent : MonoBehaviour{
         if(deathObject != null){
             Instantiate(deathObject, transform.position, Quaternion.identity);
         }
+
         Destroy(gameObject);
     }
 }
