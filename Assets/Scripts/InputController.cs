@@ -38,5 +38,9 @@ public class InputController : MonoBehaviour{
         if (Input.GetButtonUp("Throw")){
             PC.EndThrow();
         }
+
+        if (Input.GetButtonDown("FruitBasket")){
+            PC.InteractWithFruitBasket();
+        }
     }
 }

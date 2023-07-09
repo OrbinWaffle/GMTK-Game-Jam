@@ -21,11 +21,14 @@ public class PlayerController : MonoBehaviour{
     [SerializeField] float minKickForce;
     [SerializeField] float maxKickForce;
     [SerializeField] float maxHoldTime;
+    FruitBasket fruitBasket;
+
     // Start is called before the first frame update
 
     void Start(){
         CC = GetComponent<CharacterController>();
         anim = GetComponentInChildren<Animator>();
+        fruitBasket = GetComponent<FruitBasket>();
     }
 
     // Update is called once per frame
@@ -123,8 +126,6 @@ public class PlayerController : MonoBehaviour{
 
         kickForce = Mathf.Lerp(minKickForce, maxKickForce, (endTime / maxHoldTime));
 
-        Debug.Log(kickForce);
-
         if (heldObj){
             Physics.IgnoreCollision(CC, heldObj.GetComponent<Collider>());
             heldObj.transform.position = transform.position + Vector3.up * 2;
@@ -133,6 +134,36 @@ public class PlayerController : MonoBehaviour{
             heldObj.GetComponent<Rigidbody>().AddForce(holdSpot.up * kickForce, ForceMode.Impulse);
             heldObj.GetComponent<ItemParent>().collisionEnabled = true;
             heldObj = null;
+        }
+    }
+
+    public void InteractWithFruitBasket(){
+        if (heldObj){
+            bool successfullyAdded;
+
+            successfullyAdded = fruitBasket.AddToFruitBasket(heldObj.GetComponent<ItemParent>());
+
+            if (successfullyAdded){
+                heldObj.transform.parent = null;
+
+                heldObj.SetActive(false);
+
+                heldObj = null;
+            }
+        }
+        else{
+            ItemParent item;
+
+            item = fruitBasket.RemoveFromFruitBasket();
+
+            if (item){
+                item.gameObject.SetActive(true);
+
+                heldObj = item.gameObject;
+                heldObj.transform.parent = holdSpot;
+                heldObj.transform.position = holdSpot.transform.position;
+                heldObj.GetComponent<Rigidbody>().isKinematic = true;
+            }
         }
     }
 }
