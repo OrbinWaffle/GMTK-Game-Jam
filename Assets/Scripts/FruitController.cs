@@ -61,8 +61,6 @@ public class FruitController : MonoBehaviour
 
         fruitInstance.GetComponent<Rigidbody>().AddForce(pipeToUse.up * ejectionForce, ForceMode.Impulse);
 
-        fruitInstance.GetComponent<ItemParent>().itemInstance = fruitInstance;
-
         fruitInstance.GetComponent<ItemParent>().StartLifespan();
 
         Destroy(VisualFruitQueue.Peek());
