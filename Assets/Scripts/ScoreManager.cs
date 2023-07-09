@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 public class ScoreManager : MonoBehaviour{
     // To update the UI whenever a point is added call
     // ScoreManager.instance.addPoint();
     public static ScoreManager instance;
-    public Text scoreText;
-    public Text highscoreText;
+    public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI highscoreText;
 
     private void Awake(){
         instance = this;
