@@ -5,14 +5,16 @@ using UnityEngine;
 public class ItemParent : MonoBehaviour{
     public bool collisionEnabled = false;
     IEnumerator currentCoroutine;
-    public GameObject itemInstance;
+    [SerializeField] GameObject deathObject;
     [SerializeField] int lifespan;
     [SerializeField] int points;
+    public ScoreManager scoreManager;
 
 
 
     // Start is called before the first frame update
     void Start(){
+        scoreManager = GetComponent<ScoreManager>();
     }
 
     // Update is called once per frame
@@ -32,12 +34,28 @@ public class ItemParent : MonoBehaviour{
     public IEnumerator Lifespan(){
         yield return new WaitForSeconds(lifespan);
 
-        Destroy(itemInstance);
+        scoreManager.AddPoints(points * 2);
+
+        KillMe();
+    }
+
+    public int GetPoints(){
+        return points;
     }
 
     void OnCollisionEnter(Collision collison){
         if (collisionEnabled){
-            Destroy(itemInstance);
+            KillMe();
         }
+    }
+    public void OnExploded(){
+        KillMe();
+    }
+    public void KillMe(){
+        if(deathObject != null){
+            Instantiate(deathObject, transform.position, Quaternion.identity);
+        }
+
+        Destroy(gameObject);
     }
 }

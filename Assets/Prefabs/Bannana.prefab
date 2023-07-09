@@ -78,9 +78,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   collisionEnabled: 0
-  itemInstance: {fileID: 0}
+  deathObject: {fileID: 225281058948781177, guid: 39953f2ffee4fcf428049f9b6f0014b4, type: 3}
   lifespan: 30
-  points: 0
+  points: 1
 --- !u!1001 &6708576084675940310
 PrefabInstance:
   m_ObjectHideFlags: 0

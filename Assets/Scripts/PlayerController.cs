@@ -21,11 +21,14 @@ public class PlayerController : MonoBehaviour{
     [SerializeField] float minKickForce;
     [SerializeField] float maxKickForce;
     [SerializeField] float maxHoldTime;
+    FruitBasket fruitBasket;
+
     // Start is called before the first frame update
 
     void Start(){
         CC = GetComponent<CharacterController>();
         anim = GetComponentInChildren<Animator>();
+        fruitBasket = GetComponent<FruitBasket>();
     }
 
     // Update is called once per frame
@@ -36,6 +39,7 @@ public class PlayerController : MonoBehaviour{
     void UpdateAnimations(){
         anim.SetFloat("moveSpeed", moveVector.magnitude);
         anim.SetBool("isHolding", heldObj != null);
+        // anim.SetBool("isGrounded", CC.isGrounded);
     }
     void FixedUpdate(){
 
@@ -69,34 +73,39 @@ public class PlayerController : MonoBehaviour{
     }
 
     public void Pickup(){
-        if(heldObj != null){
+        if(heldObj){
             heldObj.GetComponent<Rigidbody>().isKinematic = false;
             heldObj.transform.parent = null;
+            heldObj.GetComponent<ItemParent>().StartLifespan();
+
             heldObj = null;
-            return;
         }
+        else{
+            Collider[] colliders = Physics.OverlapSphere(holdSpot.position, pickupRange);
 
-        Collider[] colliders = Physics.OverlapSphere(holdSpot.position, pickupRange);
+            foreach (Collider collider in colliders){
+                if (collider.CompareTag("Fruit")) {
+                    heldObj = collider.gameObject;
 
-        foreach(Collider collider in colliders){
-            if(collider.CompareTag("Fruit")){
-                heldObj = collider.gameObject;
-                heldObj.transform.parent = holdSpot;
-                heldObj.transform.position = holdSpot.transform.position;
-                heldObj.GetComponent<Rigidbody>().isKinematic = true;
-                heldObj.GetComponent<ItemParent>().CancelLifespan();
+                    heldObj.transform.parent = holdSpot;
+                    heldObj.transform.position = holdSpot.transform.position;
+                    heldObj.GetComponent<Rigidbody>().isKinematic = true;
+                    heldObj.GetComponent<ItemParent>().CancelLifespan();
 
-                break;
+                    break;
+                }
             }
         }
     }
 
     public void StartSprint(){
-        sprintMultiplier = 4f;
+        sprintMultiplier = 2f;
+        anim.speed = 2f;
     }
 
     public void EndSprint(){
         sprintMultiplier = 1f;
+        anim.speed = 1f;
     }
 
     public void StartThrow(){
@@ -104,6 +113,10 @@ public class PlayerController : MonoBehaviour{
     }
 
     public void EndThrow(){
+        if(heldObj == null){
+            return;
+        }
+
         float endTime;
         float kickForce;
 
@@ -117,15 +130,46 @@ public class PlayerController : MonoBehaviour{
 
         kickForce = Mathf.Lerp(minKickForce, maxKickForce, (endTime / maxHoldTime));
 
-        Debug.Log(kickForce);
-
         if (heldObj){
             Physics.IgnoreCollision(CC, heldObj.GetComponent<Collider>());
+            heldObj.transform.position = transform.position + Vector3.up * 2;
             heldObj.GetComponent<Rigidbody>().isKinematic = false;
             heldObj.transform.parent = null;
             heldObj.GetComponent<Rigidbody>().AddForce(holdSpot.up * kickForce, ForceMode.Impulse);
             heldObj.GetComponent<ItemParent>().collisionEnabled = true;
             heldObj = null;
+        }
+    }
+
+    public void InteractWithFruitBasket(){
+        if (heldObj){
+            bool successfullyAdded;
+
+            successfullyAdded = fruitBasket.AddToFruitBasket(heldObj.GetComponent<ItemParent>());
+
+            if (successfullyAdded){
+                heldObj.transform.parent = null;
+
+                heldObj.SetActive(false);
+
+                heldObj = null;
+            }
+        }
+        else{
+            ItemParent item;
+
+            item = fruitBasket.RemoveFromFruitBasket();
+
+            if (item){
+                item.gameObject.SetActive(true);
+
+                heldObj = item.gameObject;
+                heldObj.transform.parent = holdSpot;
+                heldObj.transform.position = holdSpot.transform.position;
+                heldObj.GetComponent<Rigidbody>().isKinematic = true;
+
+                item.StartLifespan();
+            }
         }
     }
 }

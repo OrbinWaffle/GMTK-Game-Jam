@@ -7,14 +7,23 @@ public class NinjaController : MonoBehaviour
     [SerializeField] float maxMoveSpeed = 5f;
     [SerializeField] float moveSpeed = 1f;
     [SerializeField] float rotationSpeed = 1f;
+    [SerializeField] float minReactionTime = .5f;
+    [SerializeField] float maxReactionTime = 2f;
     [SerializeField] private float slashRange = 3f;
     [SerializeField] private float slashCooldown = 1f;
+    [SerializeField] private float confidienceGainRate = 1f;
+    [SerializeField] private float confidienceBoost = 10f;
+    [SerializeField] float gravity = 9.81f;
+    float confidience = 0;
+    float verticalVelocity = 0f;
     [SerializeField] GameObject slashPrefab;
     List<GameObject> fruitList;
     CharacterController CC;
     Animator anim;
+    private float movement = 0;
     private float nextSlashTime = 0f;
     private float timer = 0f;
+    float nextGroundCheckTime = 0f;
     // Start is called before the first frame update
     void Start()
     {
@@ -46,29 +55,50 @@ public class NinjaController : MonoBehaviour
             Instantiate(slashPrefab, randomSpawnPosition, Quaternion.identity);
         }
         */
+        UpdateAnimations();
+    }
+    void UpdateAnimations()
+    {
+        anim.SetFloat("moveSpeed", Mathf.Abs(movement));
+        anim.SetBool("isGrounded", CC.isGrounded);
     }
     void FixedUpdate()
     {        
         GameObject closest = FindClosest(fruitList);
-        if(!closest)
+        if(CC.isGrounded && Time.time > nextGroundCheckTime)
         {
-            RotateNinja(Vector3.forward);
-            anim.SetFloat("moveSpeed", 0);
-            return;
+            if(closest)
+            {
+                Vector3 targetVector = (closest.transform.position - transform.position).normalized;
+                movement = Mathf.Clamp(targetVector.x * moveSpeed, -maxMoveSpeed, maxMoveSpeed);
+            }
+            verticalVelocity = 0f;
+            if(Time.time < nextSlashTime)
+            {
+                movement = 0;
+            }
+
+            else if(!closest)
+            {
+                movement = 0;
+                RotateNinja(Vector3.forward);
+            }
         }
-        if(Time.time >= nextSlashTime && Vector3.Distance(transform.position, closest.transform.position) < slashRange)
+        else
         {
-            GameObject fruitToKill = closest;
-            Instantiate(slashPrefab, fruitToKill.transform.position, Quaternion.Euler(0,0,Random.Range(0,256)));
-            RemoveFruit(closest);
-            Destroy(fruitToKill);
-            nextSlashTime = Time.time + slashCooldown;
+            verticalVelocity -= gravity * Time.fixedDeltaTime;
         }
-        Vector3 targetVector = (closest.transform.position - transform.position).normalized;
-        float movement =  Mathf.Clamp(targetVector.x * moveSpeed, -maxMoveSpeed, maxMoveSpeed) * Time.fixedDeltaTime;
-        CC.Move(Vector3.right * movement);
-        RotateNinja(-(Vector3.right * movement).normalized);
-        anim.SetFloat("moveSpeed", Mathf.Abs(movement));
+
+        if(CC.isGrounded && Time.time >= nextSlashTime && closest && Vector3.Distance(transform.position, closest.transform.position) < slashRange)
+        {
+            Attack(closest);
+        }
+        CC.Move(Vector3.right * movement * Time.deltaTime + Vector3.up * verticalVelocity * Time.fixedDeltaTime);
+        if(closest)
+        {
+            RotateNinja(-(Vector3.right * movement).normalized);
+        }
+        confidience += Time.fixedDeltaTime * 1;
     }
 
     GameObject FindClosest(List<GameObject> list)
@@ -77,10 +107,17 @@ public class NinjaController : MonoBehaviour
         {
             return null;
         }
-        GameObject currClosest = list[0];
-        float closestDist = Vector3.Distance(currClosest.transform.position, transform.position);
-        foreach (GameObject fruit in fruitList)
+        GameObject currClosest = null;
+        float closestDist = Mathf.Infinity;
+        for(int i = 0; i < fruitList.Count; ++i)
         {
+            GameObject fruit = fruitList[i];
+            if(fruit == null)
+            {
+                fruitList.RemoveAt(i);
+                --i;
+                continue;
+            }
             float dist = Vector3.Distance(fruit.transform.position, transform.position);
             if(dist < closestDist)
             {
@@ -90,12 +127,38 @@ public class NinjaController : MonoBehaviour
         }
         return currClosest;
     }
+    public void OnExploded()
+    {
+        anim.SetTrigger("knockedBack");
+
+        confidience = 0f;
+        
+        verticalVelocity = 10;
+        movement = Random.Range(-.5f, .5f) * moveSpeed;
+        nextGroundCheckTime = Time.time + 0.1f;
+    }
+    void Attack(GameObject objToAttack)
+    {
+        GameObject fruitToKill = objToAttack;
+        Instantiate(slashPrefab, fruitToKill.transform.position, Quaternion.Euler(0,0,Random.Range(0,256)));
+        RemoveFruit(objToAttack);
+        objToAttack.GetComponent<ItemParent>().scoreManager.AddPoints(objToAttack.GetComponent<ItemParent>().GetPoints());
+        objToAttack.GetComponent<ItemParent>().KillMe();
+        anim.SetTrigger("attack");
+        nextSlashTime = Time.time + slashCooldown;
+
+    }
     public void RotateNinja(Vector3 vectorToRotateTowards){
         Quaternion targetRotation = Quaternion.LookRotation(vectorToRotateTowards, Vector3.up);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
     }
     public void AddFruit(GameObject fruit)
     {
+        StartCoroutine(AddFruitDelay(fruit));
+    }
+    IEnumerator AddFruitDelay(GameObject fruit)
+    {
+        yield return new WaitForSeconds(Random.Range(minReactionTime, maxReactionTime));
         fruitList.Add(fruit);
     }
     public void RemoveFruit(GameObject fruit)
