@@ -8,11 +8,13 @@ public class ItemParent : MonoBehaviour{
     [SerializeField] GameObject deathObject;
     [SerializeField] int lifespan;
     [SerializeField] int points;
+    public ScoreManager scoreManager;
 
 
 
     // Start is called before the first frame update
     void Start(){
+        scoreManager = GetComponent<ScoreManager>();
     }
 
     // Update is called once per frame
@@ -31,7 +33,14 @@ public class ItemParent : MonoBehaviour{
 
     public IEnumerator Lifespan(){
         yield return new WaitForSeconds(lifespan);
+
+        scoreManager.AddPoints(points * 2);
+
         KillMe();
+    }
+
+    public int GetPoints(){
+        return points;
     }
 
     void OnCollisionEnter(Collision collison){
@@ -39,14 +48,11 @@ public class ItemParent : MonoBehaviour{
             KillMe();
         }
     }
-    public void OnExploded()
-    {
+    public void OnExploded(){
         KillMe();
     }
-    public void KillMe()
-    {
-        if(deathObject != null)
-        {
+    public void KillMe(){
+        if(deathObject != null){
             Instantiate(deathObject, transform.position, Quaternion.identity);
         }
         Destroy(gameObject);
