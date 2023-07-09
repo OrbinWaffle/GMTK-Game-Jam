@@ -24,8 +24,6 @@ public class FruitBasket : MonoBehaviour{
 
             currentFruitCount++;
 
-            Debug.Log(fruitStack.Peek().name);
-
             return true;
         }
         else{
