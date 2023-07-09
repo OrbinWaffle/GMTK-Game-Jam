@@ -3,7 +3,9 @@ guid: b16fb20e8c719bd469071e57d795c992
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - queueLocation: {instanceID: 0}
+  - audioClip: {fileID: 8300000, guid: b26c23343b8ba6f46bfc4c62bce6a8bb, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

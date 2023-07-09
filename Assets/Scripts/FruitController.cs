@@ -13,12 +13,14 @@ public class FruitController : MonoBehaviour
     public Queue<GameObject> VisualFruitQueue;
     [SerializeField] Transform queueLocation;
     [SerializeField] Transform[] pipes;
-    public 
+    [SerializeField] AudioClip audioClip;
+    public AudioSource audioSource;
 
     float nextFruitTime = 5;
     
     // Start is called before the first frame update
     void Start(){
+        audioSource = GetComponent<AudioSource>();
         FruitQueue = new Queue<GameObject>();
 
         VisualFruitQueue = new Queue<GameObject>();
@@ -60,6 +62,9 @@ public class FruitController : MonoBehaviour
         GameObject fruitInstance = Instantiate(selectedFruit, pipeToUse.position, Quaternion.identity);
 
         fruitInstance.GetComponent<Rigidbody>().AddForce(pipeToUse.up * ejectionForce, ForceMode.Impulse);
+
+        audioSource.clip = audioClip;
+        audioSource.Play();
 
         fruitInstance.GetComponent<ItemParent>().StartLifespan();
 
