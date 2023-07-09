@@ -4,17 +4,15 @@ using UnityEngine;
 
 public class ItemParent : MonoBehaviour{
     public bool collisionEnabled = false;
-    IEnumerator currentCoroutine;
+    protected IEnumerator currentCoroutine;
     [SerializeField] GameObject deathObject;
-    [SerializeField] int lifespan;
-    [SerializeField] int points;
+    [SerializeField] protected int lifespan;
+    [SerializeField] protected int points;
     public ScoreManager scoreManager;
-
-
 
     // Start is called before the first frame update
     void Start(){
-        scoreManager = GetComponent<ScoreManager>();
+        scoreManager = GameObject.FindGameObjectWithTag("MainCanvas").GetComponent<ScoreManager>();
     }
 
     // Update is called once per frame
@@ -31,7 +29,7 @@ public class ItemParent : MonoBehaviour{
         StopCoroutine(currentCoroutine);
     }
 
-    public IEnumerator Lifespan(){
+    public virtual IEnumerator Lifespan(){
         yield return new WaitForSeconds(lifespan);
 
         scoreManager.AddPoints(points * 2);
