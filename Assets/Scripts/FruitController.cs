@@ -74,4 +74,8 @@ public class FruitController : MonoBehaviour
     }
     public void DisplayQueue(){
     }
+    public void OnGameOver()
+    {
+        nextFruitTime = Mathf.Infinity;
+    }
 }
