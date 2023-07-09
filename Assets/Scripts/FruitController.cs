@@ -16,7 +16,7 @@ public class FruitController : MonoBehaviour
     [SerializeField] AudioClip audioClip;
     public AudioSource audioSource;
 
-    float nextFruitTime = 5;
+    float nextFruitTime = 0;
     
     // Start is called before the first frame update
     void Start(){
@@ -28,6 +28,7 @@ public class FruitController : MonoBehaviour
         for(int i = 0; i < queueSize; ++i){
             AddToQueue(queueLocation.position + Vector3.up * i * 2);
         }
+        nextFruitTime = Time.time + 5;
     }
 
     // Update is called once per frame

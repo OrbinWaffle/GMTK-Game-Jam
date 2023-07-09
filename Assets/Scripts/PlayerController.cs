@@ -10,7 +10,14 @@ public class PlayerController : MonoBehaviour{
     [SerializeField] float sprintMultiplier = 1f;
     [SerializeField] float pickupRange = 1f;
     [SerializeField] Transform holdSpot;
-    float groundCheckDelay = 0.25f;
+    [SerializeField] AudioClip[] pickupSounds;
+    [SerializeField] AudioClip[] throwSounds;
+    [SerializeField] AudioClip[] walkSounds;
+    [SerializeField] AudioClip bagSound;
+    AudioSource aud;
+    AudioSource walkAud;
+    AudioSource bagAud;
+    float groundCheckDelay = 0.1f;
     Vector2 moveVector;
     CharacterController CC;
     Animator anim;
@@ -29,6 +36,16 @@ public class PlayerController : MonoBehaviour{
         CC = GetComponent<CharacterController>();
         anim = GetComponentInChildren<Animator>();
         fruitBasket = GetComponent<FruitBasket>();
+        aud = GetComponent<AudioSource>();
+        walkAud = gameObject.AddComponent<AudioSource>();
+        walkAud.volume = 0.3f;
+        bagAud = gameObject.AddComponent<AudioSource>();
+        bagAud.volume = 1.2f;
+    }
+    public void OnStep()
+    {
+        walkAud.clip = walkSounds[Random.Range(0, walkSounds.Length)];
+        walkAud.Play();
     }
 
     // Update is called once per frame
@@ -92,6 +109,9 @@ public class PlayerController : MonoBehaviour{
                     heldObj.GetComponent<Rigidbody>().isKinematic = true;
                     heldObj.GetComponent<ItemParent>().CancelLifespan();
 
+                    aud.clip = pickupSounds[Random.Range(0, pickupSounds.Length)];
+                    aud.Play();
+
                     break;
                 }
             }
@@ -123,6 +143,8 @@ public class PlayerController : MonoBehaviour{
         endTime = Time.time - startTime;
 
         anim.SetTrigger("kick");
+        aud.clip = throwSounds[Random.Range(0, throwSounds.Length)];
+        aud.Play();
 
         if (endTime > maxHoldTime){
             endTime = maxHoldTime;
@@ -148,6 +170,10 @@ public class PlayerController : MonoBehaviour{
             successfullyAdded = fruitBasket.AddToFruitBasket(heldObj.GetComponent<ItemParent>());
 
             if (successfullyAdded){
+
+                bagAud.clip = bagSound;
+                bagAud.Play();
+
                 heldObj.transform.parent = null;
 
                 heldObj.SetActive(false);
@@ -161,6 +187,10 @@ public class PlayerController : MonoBehaviour{
             item = fruitBasket.RemoveFromFruitBasket();
 
             if (item){
+
+                bagAud.clip = bagSound;
+                bagAud.Play();
+
                 item.gameObject.SetActive(true);
 
                 heldObj = item.gameObject;
