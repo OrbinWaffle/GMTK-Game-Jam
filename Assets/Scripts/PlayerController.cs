@@ -73,24 +73,27 @@ public class PlayerController : MonoBehaviour{
     }
 
     public void Pickup(){
-        if(heldObj != null){
+        if(heldObj){
             heldObj.GetComponent<Rigidbody>().isKinematic = false;
             heldObj.transform.parent = null;
+            heldObj.GetComponent<ItemParent>().StartLifespan();
+
             heldObj = null;
-            return;
         }
+        else{
+            Collider[] colliders = Physics.OverlapSphere(holdSpot.position, pickupRange);
 
-        Collider[] colliders = Physics.OverlapSphere(holdSpot.position, pickupRange);
+            foreach (Collider collider in colliders){
+                if (collider.CompareTag("Fruit")) {
+                    heldObj = collider.gameObject;
 
-        foreach(Collider collider in colliders){
-            if(collider.CompareTag("Fruit")){
-                heldObj = collider.gameObject;
-                heldObj.transform.parent = holdSpot;
-                heldObj.transform.position = holdSpot.transform.position;
-                heldObj.GetComponent<Rigidbody>().isKinematic = true;
-                heldObj.GetComponent<ItemParent>().CancelLifespan();
+                    heldObj.transform.parent = holdSpot;
+                    heldObj.transform.position = holdSpot.transform.position;
+                    heldObj.GetComponent<Rigidbody>().isKinematic = true;
+                    heldObj.GetComponent<ItemParent>().CancelLifespan();
 
-                break;
+                    break;
+                }
             }
         }
     }
@@ -110,10 +113,10 @@ public class PlayerController : MonoBehaviour{
     }
 
     public void EndThrow(){
-        if(heldObj == null)
-        {
+        if(heldObj == null){
             return;
         }
+
         float endTime;
         float kickForce;
 
@@ -164,6 +167,8 @@ public class PlayerController : MonoBehaviour{
                 heldObj.transform.parent = holdSpot;
                 heldObj.transform.position = holdSpot.transform.position;
                 heldObj.GetComponent<Rigidbody>().isKinematic = true;
+
+                item.StartLifespan();
             }
         }
     }
