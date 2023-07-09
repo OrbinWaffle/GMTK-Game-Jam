@@ -14,6 +14,8 @@ public class NinjaController : MonoBehaviour
     [SerializeField] private float confidienceGainRate = 1f;
     [SerializeField] private float confidienceBoost = 10f;
     [SerializeField] float gravity = 9.81f;
+    [SerializeField] AudioClip[] hurtSounds;
+    AudioSource aud;
     float confidience = 0;
     float verticalVelocity = 0f;
     [SerializeField] GameObject slashPrefab;
@@ -30,6 +32,7 @@ public class NinjaController : MonoBehaviour
         fruitList = new List<GameObject>();
         CC = GetComponent<CharacterController>();
         anim = GetComponentInChildren<Animator>();
+        aud = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -130,6 +133,9 @@ public class NinjaController : MonoBehaviour
     public void OnExploded()
     {
         anim.SetTrigger("knockedBack");
+
+        aud.clip = hurtSounds[Random.Range(0, hurtSounds.Length)];
+        aud.Play();
 
         confidience = 0f;
         

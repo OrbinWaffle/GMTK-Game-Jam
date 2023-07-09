@@ -43,7 +43,10 @@ public class ItemParent : MonoBehaviour{
 
     void OnCollisionEnter(Collision collison){
         if (collisionEnabled){
-            KillMe();
+            if(!collison.gameObject.CompareTag("Fruit"))
+            {
+                KillMe();
+            }
         }
     }
     public void OnExploded(){
